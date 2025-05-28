@@ -1,3 +1,6 @@
+@php
+    use Carbon\Carbon;
+@endphp
 @extends('layouts.layout')
 @section('style')
     <link rel="stylesheet" type="text/css" href="{{asset('temp/src/plugins/src/table/datatable/datatables.css')}}">
@@ -38,12 +41,15 @@
                 <!-- /BREADCRUMB -->
 
                 <div class="row layout-top-spacing">
+
+
                     {{-- <div class="col-xl-12 col-lg-12 col-sm-12 my-3">
                         <button data-bs-toggle="modal" data-bs-target="#inputFormModal" class="btn btn-primary btn-sm _effect--ripple waves-effect waves-light">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         </button>
                     </div> --}}
                     <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                        <a class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#cetakPenggunaanid">Cetak</a>
                         <div class="widget-content widget-content-area br-8">
                             <table id="zero-config" class="table table-striped dt-table-hover" style="width:100%">
                                 <thead>
@@ -127,23 +133,72 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade inputForm-modal" id="inputFormModal" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
+    <div class="modal fade inputForm-modal" id="cetakPenggunaanid" tabindex="-1" role="dialog" aria-labelledby="inputFormModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
 
             <div class="modal-header" id="inputFormModalLabel">
-                <h5 class="modal-title">Tambah Tarif</h5>
+                <h5 class="modal-title">Cetak Penggunaan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
             </div>
-            <form class="mt-0" action='{{route('tarif.store')}}' method="post" id="storeform">
+            <form class="mt-0" action='{{route('penggunaan.cetak')}}' method="post" id="storeform">
+                @csrf
                 <div class="modal-body">
-                    @csrf
+                    {{-- <div class="row">
+
+                    </div> --}}
+                    @php
+                        $bulanArray = [
+                            1 => 'Januari',
+                            2 => 'Februari',
+                            3 => 'Maret',
+                            4 => 'April',
+                            5 => 'Mei',
+                            6 => 'Juni',
+                            7 => 'Juli',
+                            8 => 'Agustus',
+                            9 => 'September',
+                            10 => 'Oktober',
+                            11 => 'November',
+                            12 => 'Desember',
+                        ];
+
+                        $bulan = Carbon::now()->month;
+                        // Mendapatkan tahun saat ini
+                        $currentYear = date('Y');
+
+                        // Membuat array tahun dari 5 tahun kebelakang sampai 1 tahun kedepan
+                        $years = range($currentYear - 5, $currentYear + 2);
+                    @endphp
                     <div class="form-group">
                         <div class="input-group mb-3">
                             <span class="input-group-text">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             </span>
-                            <input type="text" class="form-control" placeholder="Golongan" aria-label="email" name="golongan">
+                            <select name="bulan" class="form-control">
+                                <option value="">Pilih Bulan</option>
+                                @for ($i = 0; $i < count($bulanArray); $i++)
+                                    {{-- @if ($i+1 )
+
+                                    @else
+
+                                    @endif --}}
+                                    <option value="{{$i+1}}">{{$bulanArray[$i+1]}}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                            </span>
+                            <select name="tahun" class="form-control">
+                                <option value="">Pilih Tahun</option>
+                                @foreach ($years as $year)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -152,27 +207,11 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                             </span>
                             <select name="alamat" class="form-control">
-                                <option value="">Pilih Alamat</option>
-                                {{-- @foreach ($alamat as $a)
+                                <option value="">Pilih Wilayah</option>
+                                @foreach ($alamat as $a)
                                     <option value="{{$a->id}}">{{$a->nama_alamat}}</option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            </span>
-                            <input type="number" class="form-control" placeholder="Abonemen" aria-label="email" name="abonemen">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                            </span>
-                            <input type="number" class="form-control" placeholder="Tarif" aria-label="email" name="tarif">
                         </div>
                     </div>
 
@@ -191,7 +230,7 @@
                         <div class="spinner-border spinner-border-sm text-white align-self-center"></div> Loading
                     </button> --}}
                     <button type="submit" class="btn btn-primary btn-lg mb-2 me-4" id="saveBtn">
-                        Simpan
+                        Cetak
                     </button>
 
                 </div>

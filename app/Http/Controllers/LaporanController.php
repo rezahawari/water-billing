@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alamat;
 use App\Models\Catat;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,19 @@ class LaporanController extends Controller
         $catat = Catat::with('customer', 'user', 'petugas')->get();
         return view('pages.laporan.penggunaan', [
             'catat' => $catat,
-            'months' => $months
+            'months' => $months,
+            'alamat' => Alamat::all(),
+        ]);
+    }
+
+    public function cetakpenggunaan(Request $request)
+    {
+        $catat = Catat::where('month', $request->bulan)->where('year', $request->tahun)->where('alamat_id', $request->alamat)->with('customer', 'user', 'alamat')->get();
+        $alamat = Alamat::where('id', $request->alamat)->first();
+        return view('pages.laporan.cetakPenggunaan', [
+            'catat' => $catat,
+            'request' => $request,
+            'alamat' => $alamat
         ]);
     }
 }

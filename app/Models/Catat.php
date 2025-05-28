@@ -25,4 +25,9 @@ class Catat extends Model
     {
         return $this->belongsTo(User::class, 'petugas_id', 'id');
     }
+
+    public function alamat()
+    {
+        return $this->belongsTo(Alamat::class, 'alamat_id', 'id');
+    }
 }

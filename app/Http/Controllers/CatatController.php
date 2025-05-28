@@ -197,6 +197,7 @@ class CatatController extends Controller
             $catat = Catat::create([
                 'id_pelanggan' => $request->idpel,
                 'customer_id' => $cust->id,
+                'alamat_id' => $cust->alamat_id,
                 'user_id' => $cust->user_id,
                 'month' => $request->bulan,
                 'year' => $request->tahun,

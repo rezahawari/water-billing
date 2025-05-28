@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function(){
 
     // LAPORAN
     Route::get('/penggunaan', [LaporanController::class, 'penggunaan'])->name('penggunaan');
+    Route::post('/penggunaan/cetak', [LaporanController::class, 'cetakpenggunaan'])->name('penggunaan.cetak');
     Route::get('/tunggakan', [TunggakanController::class, 'home'])->name('tunggakan');
 
     //PELANGGAN
