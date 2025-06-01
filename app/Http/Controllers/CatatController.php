@@ -32,7 +32,11 @@ class CatatController extends Controller
             12 => 'Desember'
         ];
 
-        $catat = Catat::with('customer', 'user', 'petugas')->get();
+        if(Auth::user()->role == 3) {
+            $catat = Catat::where('petugas_id', Auth::user()->id)->with('customer', 'user', 'petugas')->get();
+        }else{
+            $catat = Catat::with('customer', 'user', 'petugas')->get();
+        }
 
         return view('pages.catat', [
             'months' => $months,

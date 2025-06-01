@@ -12,6 +12,7 @@ use App\Http\Controllers\TarifController;
 use App\Http\Controllers\TunggakanController;
 use App\Http\Controllers\UserController;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,6 +22,10 @@ Route::get('/coba', [CobaController::class, 'coba']);
 Route::get('/get-filled-months', [CatatController::class, 'getFilledMonths']);
 Route::middleware('auth')->group(function(){
     Route::get('/', function () {
+        if (Gate::denies('admin')) {
+            return redirect()->route('catat')
+                ->with('fail', 'Anda tidak memiliki akses');
+        }
         return view('pages.dashboard');
     })->name('dashboard');
 

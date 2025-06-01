@@ -194,14 +194,16 @@
 
                 <div class="shadow-bottom"></div>
                 <ul class="list-unstyled menu-categories" id="accordionExample">
-                    <li class="menu {{ request()->is('/') ? 'active' : '' }}">
-                        <a href="{{route('dashboard')}}" aria-expanded="false" class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                                <span>Dashboard</span>
-                            </div>
-                        </a>
-                    </li>
+                    @can('admin')
+                        <li class="menu {{ request()->is('/') ? 'active' : '' }}">
+                            <a href="{{route('dashboard')}}" aria-expanded="false" class="dropdown-toggle">
+                                <div class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                    <span>Dashboard</span>
+                                </div>
+                            </a>
+                        </li>
+                    @endcan
                     @php
                         $catatRoutes = ['catat'];
                         $isCatatActive = in_array(request()->route()->getName(), $catatRoutes);
@@ -215,19 +217,21 @@
                             </div>
                         </a>
                     </li>
-                    @php
-                        $catatRoutes = ['tagihan', 'tagihan.show'];
-                        $isCatatActive = in_array(request()->route()->getName(), $catatRoutes);
-                    @endphp
-                    <li class="menu {{ $isCatatActive ? 'active' : '' }}">
-                        <a href="{{route('tagihan')}}" aria-expanded="false" class="dropdown-toggle">
-                            <div class="">
+                    @can('admin')
+                        @php
+                            $catatRoutes = ['tagihan', 'tagihan.show'];
+                            $isCatatActive = in_array(request()->route()->getName(), $catatRoutes);
+                        @endphp
+                        <li class="menu {{ $isCatatActive ? 'active' : '' }}">
+                            <a href="{{route('tagihan')}}" aria-expanded="false" class="dropdown-toggle">
+                                <div class="">
 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                                <span>Tagihan</span>
-                            </div>
-                        </a>
-                    </li>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                    <span>Tagihan</span>
+                                </div>
+                            </a>
+                        </li>
+                    @endcan
                     @php
                         $laporanRoutes = ['penggunaan', 'tunggakan'];
                         $isLaporanActive = in_array(request()->route()->getName(), $laporanRoutes);
@@ -251,52 +255,55 @@
                             </li>
                         </ul>
                     </li>
-                    @php
-                        $pelangganRoutes = ['customer.all', 'customer.allshow'];
-                        $isPelangganActive = in_array(request()->route()->getName(), $pelangganRoutes);
-                    @endphp
-                    <li class="menu {{ $isPelangganActive ? 'active' : '' }}" id="sidebar-item">
-                        <a href="#pelanggan" data-bs-toggle="collapse" aria-expanded="{{ $isPelangganActive ? 'true' : 'false' }}" class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                <span>Pelanggan</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            </div>
-                        </a>
-                        <ul class="collapse submenu list-unstyled {{ $isPelangganActive ? 'show' : '' }}" id="pelanggan" data-bs-parent="#accordionExample">
-                            <li class="{{ request()->is('pelanggan') ? 'active' : '' }}">
-                                <a href="{{route('customer.all')}}"> Semua Pelanggan </a>
-                            </li>
-                        </ul>
-                    </li>
-                    @php
-                        $settingsRoutes = ['tarif', 'alamat', 'users'];
-                        $isSettingsActive = in_array(request()->route()->getName(), $settingsRoutes);
-                    @endphp
-                    <li class="menu {{ $isSettingsActive ? 'active' : '' }}" id="sidebar-item">
-                        <a href="#settings" data-bs-toggle="collapse" aria-expanded="{{ $isSettingsActive ? 'true' : 'false' }}" class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                                <span>Settings</span>
-                            </div>
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            </div>
-                        </a>
-                        <ul class="collapse submenu list-unstyled {{ $isSettingsActive ? 'show' : '' }}" id="settings" data-bs-parent="#accordionExample">
-                            <li class="{{ request()->is('tarif') ? 'active' : '' }}">
-                                <a href="{{route('tarif')}}"> Tarif </a>
-                            </li>
-                            <li class="{{ request()->is('alamat') ? 'active' : '' }}">
-                                <a href="{{route('alamat')}}"> Alamat </a>
-                            </li>
-                            <li class="{{ request()->is('users') ? 'active' : '' }}">
-                                <a href="{{route('users')}}"> Users </a>
-                            </li>
-                        </ul>
-                    </li>
+                    @can('admin')
+
+                        @php
+                            $pelangganRoutes = ['customer.all', 'customer.allshow'];
+                            $isPelangganActive = in_array(request()->route()->getName(), $pelangganRoutes);
+                        @endphp
+                        <li class="menu {{ $isPelangganActive ? 'active' : '' }}" id="sidebar-item">
+                            <a href="#pelanggan" data-bs-toggle="collapse" aria-expanded="{{ $isPelangganActive ? 'true' : 'false' }}" class="dropdown-toggle">
+                                <div class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                    <span>Pelanggan</span>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </div>
+                            </a>
+                            <ul class="collapse submenu list-unstyled {{ $isPelangganActive ? 'show' : '' }}" id="pelanggan" data-bs-parent="#accordionExample">
+                                <li class="{{ request()->is('pelanggan') ? 'active' : '' }}">
+                                    <a href="{{route('customer.all')}}"> Semua Pelanggan </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @php
+                            $settingsRoutes = ['tarif', 'alamat', 'users'];
+                            $isSettingsActive = in_array(request()->route()->getName(), $settingsRoutes);
+                        @endphp
+                        <li class="menu {{ $isSettingsActive ? 'active' : '' }}" id="sidebar-item">
+                            <a href="#settings" data-bs-toggle="collapse" aria-expanded="{{ $isSettingsActive ? 'true' : 'false' }}" class="dropdown-toggle">
+                                <div class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                    <span>Settings</span>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </div>
+                            </a>
+                            <ul class="collapse submenu list-unstyled {{ $isSettingsActive ? 'show' : '' }}" id="settings" data-bs-parent="#accordionExample">
+                                <li class="{{ request()->is('tarif') ? 'active' : '' }}">
+                                    <a href="{{route('tarif')}}"> Tarif </a>
+                                </li>
+                                <li class="{{ request()->is('alamat') ? 'active' : '' }}">
+                                    <a href="{{route('alamat')}}"> Alamat </a>
+                                </li>
+                                <li class="{{ request()->is('users') ? 'active' : '' }}">
+                                    <a href="{{route('users')}}"> Users </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endcan
 
                 </ul>
 
