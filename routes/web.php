@@ -26,7 +26,8 @@ Route::middleware('auth')->group(function(){
             return redirect()->route('catat')
                 ->with('fail', 'Anda tidak memiliki akses');
         }
-        return view('pages.dashboard');
+        // return view('pages.dashboard');
+        return redirect()->route('catat')->with('fail', 'Halaman belum tersedia');
     })->name('dashboard');
 
     Route::post('/keluar', [LoginController::class, 'logout'])->name('keluar');

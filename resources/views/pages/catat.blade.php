@@ -190,14 +190,14 @@
                                                 @csrf
                                                 <div class="form-group mb-4">
                                                     <label for="idpel">ID Pelanggan</label>
-                                                    <input type="text" class="form-control" id="idpel" autocomplete="off" name="idpel">
+                                                    <input type="text" class="form-control" id="idpel" autocomplete="off" name="idpel" oninput="removeDisable('btnnextidpel')">
                                                 </div>
 
 
                                             <div class="button-action mt-5">
                                                 <a class="btn btn-info me-3" id="start-scan">Scan</a>
                                                 <a class="btn btn-secondary btn-prev me-3" disabled>Prev</a>
-                                                <a class="btn btn-secondary btn-nxt" onclick="fillinput()" id="next">Next</a>
+                                                <a class="btn btn-secondary btn-nxt disabled" id="btnnextidpel" onclick="fillinput()" id="next">Next</a>
                                             </div>
                                         </div>
                                         {{-- <div id="defaultStep-two" class="content" role="tabpanel">
@@ -1054,5 +1054,12 @@
             });
         });
 
+    </script>
+
+    <script>
+        function removeDisable(id) {
+            const element = document.getElementById(id);
+            element.classList.remove('disabled');
+        }
     </script>
 @endsection

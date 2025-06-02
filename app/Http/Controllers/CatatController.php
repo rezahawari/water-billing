@@ -6,6 +6,7 @@ use App\Models\Catat;
 use App\Models\Customer;
 use App\Models\Tagihan;
 use App\Models\Tarif;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -124,13 +125,22 @@ class CatatController extends Controller
     {
         try {
             $catat = Catat::where('id_pelanggan', $id)->with('user')->latest('tgl_cek')->first();
+            $customer = Customer::where('id_pelanggan', $id)->with('user')->first();
             $meter = 0;
             if($catat) {
                 $meter = $catat->meter_akhir;
             }
+
+            if(!$catat) {
+                $catat = $customer;
+
+                $catat->meter_akhir = 0;
+                $catat->month = Carbon::now()->month - 1;
+                $catat->year = Carbon::now()->year;
+            }
             return response()->json([
                 // 'meterawal' => $meter
-                'catat' => $catat
+                'catat' => $catat,
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Pelanggan tidak ditemukan'], 404);
