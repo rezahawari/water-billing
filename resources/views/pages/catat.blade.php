@@ -805,9 +805,10 @@
 
             Instascan.Camera.getCameras().then(cameras => {
                 if (cameras.length > 0) {
-                    // Pilih kamera belakang (environment-facing mode)
+                    // Cari kamera belakang
                     const backCamera = cameras.find(camera => camera.facing === 'environment');
 
+                    // Jika kamera belakang tidak ditemukan, coba menggunakan kamera pertama (biasanya kamera depan)
                     if (backCamera) {
                         scanner = new Instascan.Scanner({
                             video: document.getElementById('preview'),
@@ -819,11 +820,24 @@
                             processScan(content);
                         });
 
-                        // Mulai scanner dengan kamera belakang
+                        // Mulai scanner dengan kamera belakang jika ditemukan
                         scanner.start(backCamera);
                     } else {
-                        alert('Kamera belakang tidak tersedia!');
-                        modal.hide();
+                        // Jika kamera belakang tidak ditemukan, pilih kamera pertama (depan atau lainnya)
+                        const firstCamera = cameras[0];
+                        scanner = new Instascan.Scanner({
+                            video: document.getElementById('preview'),
+                            mirror: false
+                        });
+
+                        scanner.addListener('scan', (content) => {
+                            scanner.stop();
+                            processScan(content);
+                        });
+
+                        // Mulai scanner dengan kamera yang tersedia
+                        scanner.start(firstCamera);
+                        alert('Kamera belakang tidak tersedia, menggunakan kamera pertama.');
                     }
                 } else {
                     alert('Kamera tidak tersedia!');
