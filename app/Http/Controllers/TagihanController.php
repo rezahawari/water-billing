@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InvoiceCounter;
 use Carbon\Carbon;
 use App\Models\Tagihan;
 use App\Models\Customer;
@@ -40,6 +41,29 @@ class TagihanController extends Controller
 
         $tgh->total_denda = $totalDenda;
 
+        $invnum = InvoiceCounter::where('tagihan_id', $tagihan->id)->first();
+
+        if(!$invnum){
+            $allinnv = InvoiceCounter::max('counter');
+            if($allinnv == null){
+                $inv = InvoiceCounter::create([
+                    'counter' => 1,
+                    'tagihan_id' => $tgh->id,
+                    'date' => Carbon::now()->format('Y-m-d'),
+                ]);
+            }else {
+                $inv = InvoiceCounter::create([
+                    'counter' => $allinnv + 1,
+                    'tagihan_id' => $tgh->id,
+                    'date' => Carbon::now()->format('Y-m-d'),
+                ]);
+            }
+
+            $numinv = $inv;
+        }else {
+            $numinv = $invnum;
+        }
+
         // // Muat Tagihan + relasi 'catat'
         // $tgh = $tagihan->load('catat');
 
@@ -64,7 +88,17 @@ class TagihanController extends Controller
         // Kembalikan ke view
         return view('pages.findtagihan', [
             'tagihan' => $tgh,
+            'invoice' => $numinv
         ]);
+    }
+
+    public function payment(Request $request)
+    {
+        $tagihan = Tagihan::find($request->id);
+        $tagihan->status = 2;
+        $tagihan->save();
+
+        return redirect()->route('tagihan')->with('success', 'Tagihan berhasil dibayar');
     }
 
 }

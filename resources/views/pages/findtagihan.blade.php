@@ -41,8 +41,8 @@
                                                                     </div>
 
                                                                     <div class="col-sm-6 text-sm-end">
-                                                                        <p class="inv-list-number mt-sm-3 pb-sm-2 mt-4"><span class="inv-title">Invoice : </span> <span class="inv-number">#0001</span></p>
-                                                                        <p class="inv-created-date mt-sm-5 mt-3"><span class="inv-title">Invoice Date : </span> <span class="inv-date">20 Mar 2024</span></p>
+                                                                        <p class="inv-list-number mt-sm-3 pb-sm-2 mt-4"><span class="inv-title">Invoice : </span> <span class="inv-number">#{{$invoice->counter}}</span></p>
+                                                                        <p class="inv-created-date mt-sm-5 mt-3"><span class="inv-title">Invoice Date : </span> <span class="inv-date">{{$invoice->date}}</span></p>
                                                                     </div>
                                                                 </div>
 
@@ -72,20 +72,20 @@
                                                                             <tr>
                                                                                 <td><strong>ID Pel</strong></td>
                                                                                 <td>: {{$tagihan->id_pelanggan}}</td>
-                                                                                <td><strong>Nama</strong></td>
-                                                                                <td>: {{$tagihan->customer->user->nama}}</td>
+                                                                                <td><strong>No Meter</strong></td>
+                                                                                <td>: {{$tagihan->customer->no_meter}}</td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td><strong>Tarif</strong></td>
                                                                                 <td>: {{$tagihan->customer->tarif->kode}}</td>
-                                                                                <td><strong>Bulan / Tahun</strong></td>
-                                                                                <td>: {{$tagihan->bulan}} / {{$tagihan->tahun}}</td>
+                                                                                <td><strong>Nama</strong></td>
+                                                                                <td>: {{$tagihan->customer->user->nama}}</td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td><strong>Stand Meter</strong></td>
                                                                                 <td>: {{$tagihan->catat->meter_awal}} - {{$tagihan->catat->meter_akhir}} ({{$tagihan->penggunaan}} M&sup3;)</td>
-                                                                                <td></td>
-                                                                                <td></td>
+                                                                                <td><strong>Bulan / Tahun</strong></td>
+                                                                                <td>: {{$tagihan->bulan}} / {{$tagihan->tahun}}</td>
                                                                             </tr>
 
                                                                         </tbody>
@@ -165,16 +165,10 @@
 
                                                 <div class="row">
                                                     <div class="col-xl-12 col-md-3 col-sm-6">
-                                                        <a href="javascript:void(0);" class="btn btn-primary btn-send">Send Invoice</a>
+                                                        <a href="javascript:void(0);" class="btn btn-danger btn-send btnbayar">Bayar</a>
                                                     </div>
                                                     <div class="col-xl-12 col-md-3 col-sm-6">
                                                         <a href="javascript:void(0);" class="btn btn-secondary btn-print  action-print">Print</a>
-                                                    </div>
-                                                    <div class="col-xl-12 col-md-3 col-sm-6">
-                                                        <a href="javascript:void(0);" class="btn btn-success btn-download">Download</a>
-                                                    </div>
-                                                    <div class="col-xl-12 col-md-3 col-sm-6">
-                                                        <a href="./app-invoice-edit.html" class="btn btn-dark btn-edit">Edit</a>
                                                     </div>
                                                 </div>
 
@@ -209,4 +203,62 @@
 @endsection
 @section('script')
     <script src="{{asset('temp/src/assets/js/apps/invoice-preview.js')}}"></script>
+    <script>
+        $(document).ready(function(){
+            $('.btnbayar').on('click', function(){
+            var id = $(this).data('id');
+            // var nama = $(this).data('nama');
+            Swal.fire({
+                title: "Apakah kamu yakin ingin membayar tagihan ini?",
+                // text: "Kamu tidak akan bisa mengembalikan ini!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, lanjutkan pembayaran!",
+                cancelButtonText: 'Tidak',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/tagihan/payment', // Ganti dengan URL endpoint penghapusan di server
+                        type: 'POST',
+                        data: { id: id },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Menambahkan CSRF token
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: "Berhasil!",
+                                    text: "Tagihan berhasil dibyayar",
+                                    icon: "success"
+                                }).then(() => {
+                                    // Refresh halaman setelah berhasil menghapus
+                                    location.reload(); // Halaman akan di-refresh
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "Gagal!",
+                                    text: "Terjadi kesalahan saat membayar tagihan.",
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(xhr);
+
+
+                            Swal.fire({
+                                title: "Gagal!",
+                                text: error,
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
+        });
+        });
+    </script>
 @endsection

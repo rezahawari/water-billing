@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alamat;
 use App\Models\Catat;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class LaporanController extends Controller
@@ -38,7 +39,8 @@ class LaporanController extends Controller
         return view('pages.laporan.cetakPenggunaan', [
             'catat' => $catat,
             'request' => $request,
-            'alamat' => $alamat
+            'alamat' => $alamat,
+            'dnow' => Carbon::now()->format('d-m-Y'),
         ]);
     }
 }

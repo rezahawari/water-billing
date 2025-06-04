@@ -191,9 +191,10 @@ class CatatController extends Controller
         if ($validator->fails()) {
             return back()->with('fail', 'Data gagal disimpan, Silahkan input bulan sebelumnya terlebih dahulu');
         }
-
+        // dd($request->all());
+        $cust = Customer::where('no_meter', $request->idpel)->first();
         //cek data pada bulan itu
-        $cek = Catat::where([
+        $cek = Catat::where('id_pelanggan', $cust->id_pelanggan)->where([
             ['month', $request->bulan],
             ['year', $request->tahun]
         ])->exists();

@@ -27,7 +27,7 @@
                                                         <div class="content-section">
 
                                                             <div class="inv--head-section inv--detail-section">
-
+                                                                <small>Report Created Date : {{$dnow}}</small>
                                                                 <div class="row">
                                                                     @php
                                                                         $months = [
@@ -89,7 +89,7 @@
                                                                         <thead>
                                                                             <tr>
                                                                                 <th>No</th>
-                                                                                <th>ID Pel</th>
+                                                                                <th>No Meter</th>
                                                                                 <th>Nama</th>
                                                                                 <th>Meter Awal</th>
                                                                                 <th>Meter AKhir</th>
@@ -112,7 +112,7 @@
                                                                                     @endphp
                                                                                     <tr>
                                                                                         <td>{{$no++}}</td>
-                                                                                        <td>{{$c->id_pelanggan}}</td>
+                                                                                        <td>{{$c->customer->no_meter}}</td>
                                                                                         <td>{{$c->user->nama}}</td>
                                                                                         <td>{{$c->meter_awal}}</td>
                                                                                         <td>{{$c->meter_akhir}}</td>
@@ -166,9 +166,6 @@
                                                     </div> --}}
                                                     <div class="col-xl-12 col-md-3 col-sm-6">
                                                         <a href="javascript:void(0);" class="btn btn-secondary btn-print  action-print">Print</a>
-                                                    </div>
-                                                    <div class="col-xl-12 col-md-3 col-sm-6">
-                                                        <a href="javascript:void(0);" class="btn btn-success btn-download">Download</a>
                                                     </div>
                                                     {{-- <div class="col-xl-12 col-md-3 col-sm-6">
                                                         <a href="./app-invoice-edit.html" class="btn btn-dark btn-edit">Edit</a>

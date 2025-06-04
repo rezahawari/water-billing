@@ -162,10 +162,10 @@
   font-weight: 600;
 }
 .invoice .content-section .inv--product-table-section {
-  padding: 30px 0;
+  padding: 0px 0;
 }
 .invoice .content-section .inv--product-table-section table {
-  margin-bottom: 0;
+  margin: 0px;
 }
 .invoice .content-section .inv--product-table-section thead tr {
   border: none;
@@ -201,7 +201,7 @@
 .invoice .content-section .inv--product-table-section tbody tr:nth-of-type(even) td {
   background-color: #f1f2f3 !important;
 }
-.invoice .content-section .inv--payment-info {
+/* .invoice .content-section .inv--payment-info {
   font-size: 15px;
   font-weight: 600;
 }
@@ -232,8 +232,8 @@
   color: #888ea8;
   white-space: normal;
   margin-right: 4px;
-}
-.invoice .content-section .inv--total-amounts {
+} */
+/* .invoice .content-section .inv--total-amounts {
   padding: 0 35px;
   margin-bottom: 25px;
   padding-bottom: 25px;
@@ -248,7 +248,7 @@
   color: #fff;
   display: inline-block;
   letter-spacing: 1px;
-}
+} */
 
 /*    Inv detail section    */
 /*inv-list-number*/

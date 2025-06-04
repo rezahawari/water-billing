@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function(){
     // TAGIHAN
     Route::get('/tagihan', [TagihanController::class, 'home'])->name('tagihan');
     Route::get('/tagihan/{tagihan}/show', [TagihanController::class, 'show'])->name('tagihan.show');
+    Route::post('/tagihan/payment', [TagihanController::class, 'payment'])->name('tagihan.payment');
 
     // LAPORAN
     Route::get('/penggunaan', [LaporanController::class, 'penggunaan'])->name('penggunaan');
