@@ -690,7 +690,7 @@
             });
             const data = await response.json();
             console.log(data);
-
+            
             document.getElementById('nama').value = data.catat.user.nama;
             document.getElementById('meterawal').value = data.catat.meter_akhir;
 

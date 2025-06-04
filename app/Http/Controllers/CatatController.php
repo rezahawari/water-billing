@@ -125,8 +125,8 @@ class CatatController extends Controller
     public function ceklastcatat($id)
     {
         try {
-            $catat = Catat::where('id_pelanggan', $id)->with('user')->latest('tgl_cek')->first();
-            $customer = Customer::where('id_pelanggan', $id)->with('user')->first();
+            $customer = Customer::where('no_meter', $id)->with('user')->first();
+            $catat = Catat::where('id_pelanggan', $customer->id_pelanggan)->with('user')->latest('tgl_cek')->first();
             $meter = 0;
             if($catat) {
                 $meter = $catat->meter_akhir;
