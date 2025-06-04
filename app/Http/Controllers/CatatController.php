@@ -202,7 +202,7 @@ class CatatController extends Controller
         }
 
         try {
-            $cust = Customer::where('id_pelanggan', $request->idpel)->first();
+            $cust = Customer::where('no_meter', $request->idpel)->first();
             $isrusak = 0;
 
             if($request->has('isrusak')){
@@ -210,7 +210,7 @@ class CatatController extends Controller
             }
 
             $catat = Catat::create([
-                'id_pelanggan' => $request->idpel,
+                'id_pelanggan' => $cust->id_pelanggan,
                 'customer_id' => $cust->id,
                 'alamat_id' => $cust->alamat_id,
                 'user_id' => $cust->user_id,
@@ -225,14 +225,14 @@ class CatatController extends Controller
 
             $penggunaan = $request->meterakhir - $request->meterawal;
 
-            $customer = Customer::where('id_pelanggan', $catat->id_pelanggan)->first();
+            $customer = Customer::where('no_meter', $request->idpel)->first();
             $tarif = Tarif::where('id', $customer->tarif_id)->first();
 
             $subtotal = $penggunaan * $tarif->tarif;
             $total = $subtotal + $tarif->abonemen;
             // dd($request->idpel);
             $tagihan = Tagihan::create([
-                'id_pelanggan' => $request->idpel,
+                'id_pelanggan' => $cust->id_pelanggan,
                 'customer_id' => $cust->id,
                 'catat_id' => $catat->id,
                 'bulan' => $request->bulan,
@@ -321,6 +321,8 @@ class CatatController extends Controller
         try {
             $user = Catat::find($id);
             $user->delete();
+
+            $tagihan = Tagihan::where('catat_id', $id)->delete();
 
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
