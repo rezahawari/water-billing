@@ -169,7 +169,7 @@
                                         </div>
                                         <div class="line"></div>
                                         <div class="step" data-target="#defaultStep-two">
-                                            <button type="button" class="step-trigger" role="tab"  >
+                                            <button type="button" class="step-trigger" role="tab">
                                                 <span class="bs-stepper-circle">2</span>
                                                 <span class="bs-stepper-label">Pilih bulan yang <br>ingin di input</span>
                                             </button>
@@ -200,37 +200,7 @@
                                                 <a class="btn btn-secondary btn-nxt disabled" id="btnnextidpel" onclick="fillinput()" id="next">Next</a>
                                             </div>
                                         </div>
-                                        {{-- <div id="defaultStep-two" class="content" role="tabpanel">
 
-                                                <div class="form-group mb-4">
-                                                    <label for="year-select">Pilih Tahun</label>
-                                                    <select class="form-select" id="year-select" onchange="fetchMonthData()">
-                                                        <option value="">Pilih Tahun</option>
-                                                        <!-- Tambahkan opsi tahun dari sekarang sampai 5 tahun ke belakang -->
-                                                        @php
-                                                            $currentYear = date('Y');
-                                                            for($i = $currentYear; $i >= $currentYear - 5; $i--) {
-                                                                echo "<option value='{$i}'>{$i}</option>";
-                                                            }
-                                                        @endphp
-                                                    </select>
-                                                </div>
-                                                <input type="hidden" name="bulan" id="selectedMonth" value="">
-                                                <input type="hidden" name="tahun" id="selectedYear" value="">
-
-                                                <div id="month-container" class="mt-4" style="display: none;">
-                                                    <h5>Pilih Bulan Untuk Tahun <span id="displayed-year"></span></h5>
-                                                    <div class="month-grid">
-                                                        <!-- Bulan akan dirender secara dinamis melalui JavaScript -->
-                                                    </div>
-                                                </div>
-
-
-                                            <div class="button-action mt-5">
-                                                <a class="btn btn-secondary btn-prev me-3">Prev</a>
-                                                <a class="btn btn-secondary btn-nxt" onclick="setdetailvalue()">Next</a>
-                                            </div>
-                                        </div> --}}
                                         <div id="defaultStep-two" class="content" role="tabpanel" >
                                             <div class="text-center" id="detailcust"></div>
 
@@ -538,7 +508,7 @@
     <script>
         const autoCompleteJS = new autoComplete({
             selector: "#idpel",
-            placeHolder: "Cari ID Pelanggan",
+            placeHolder: "Cari Nomor Meter",
             data: {
                 src: async () => {
                     try {
@@ -562,6 +532,8 @@
             },
             resultsList: {
                 element: (list, data) => {
+                    console.log(data);
+
                     if (!data.results.length) {
                         const message = document.createElement("div");
                         message.setAttribute("class", "no_result");
@@ -805,7 +777,7 @@
 
                     // Handle tombol setuju
                     document.getElementById('confirm-btn').onclick = () => {
-                        document.getElementById('idpel').value = idPelanggan;
+                        document.getElementById('idpel').value = data.no_meter;
                         modal.hide();
 
                         // Auto save and next
@@ -1005,32 +977,49 @@
                     url: `/catat/detail/${id}`,
                     method: 'GET',
                     success: function(response) {
+                        console.log(response.data);
+
                         if(response.status === 'success') {
                             const data = response.data;
 
-                            // Isi form dengan data
-                            $('#idpel').val(data.id_pelanggan);
-                            $('#idpel').data('isUpdate', true); // Tandai sebagai update
-                            $('#idpel').data('updateId', data.id);
+                            $('#idpel').val(data.no_meter);
+                            removeDisable('btnnextidpel');
+                            $('#nama').val(data.nama);
+                            if(data.bulan < 10) {
+                                $('#bulanpenggunaan').val('0'+data.bulan+'/'+data.tahun);
+                            }else {
+                                $('#bulanpenggunaan').val(data.bulan+'/'+data.tahun);
+                            }
 
-                            // Set tahun dan bulan
-                            $('#year-select').val(data.tahun);
-                            $('#selectedMonth').val(data.bulan);
-                            $('#selectedYear').val(data.tahun);
+                            $('#bulan').val(data.bulan);
+                            $('#tahun').val(data.tahun);
 
-                            // Isi form step 3
                             $('#meterawal').val(data.meter_awal);
                             $('#meterakhir').val(data.meter_akhir);
                             $('#tglcek').val(data.tgl_cek);
 
+                            // $('#idpel').val(data.id_pelanggan);
+                            // $('#idpel').data('isUpdate', true); // Tandai sebagai update
+                            // $('#idpel').data('updateId', data.id);
+
+
+
+                            // Isi form dengan data
+                            // $('#idpel').val(data.id_pelanggan);
+                            // $('#idpel').data('isUpdate', true); // Tandai sebagai update
+                            // $('#idpel').data('updateId', data.id);
+
+                            // Set tahun dan bulan
+                            // $('#year-select').val(data.tahun);
+                            // $('#selectedMonth').val(data.bulan);
+                            // $('#selectedYear').val(data.tahun);
+
+                            // Isi form step 3
+                            // $('#meterawal').val(data.meter_awal);
+                            // $('#meterakhir').val(data.meter_akhir);
+                            // $('#tglcek').val(data.tgl_cek);
+
                             // Set detail pelanggan
-                            $('#detailcust').html(`
-                                <p><strong>ID Pelanggan:</strong> ${data.id_pelanggan}</p>
-                                <p><strong>Nama:</strong> ${data.nama}</p>
-                                <p><strong>Alamat:</strong> ${data.alamat}</p>
-                                <p><strong>Tarif:</strong> ${data.tarif}</p>
-                                <p><strong>Bulan/Tahun:</strong> ${data.bulan}/${data.tahun}</p>
-                            `);
 
                             // Set checkbox meteran rusak
                             $('#flexSwitchCheckChecked').prop('checked', data.is_rusak === 1);
@@ -1044,7 +1033,7 @@
                             }
 
                             // Pindah ke step 3
-                            bsStepper.to(3);
+                            bsStepper.to(2);
                         }
                     },
                     error: function() {

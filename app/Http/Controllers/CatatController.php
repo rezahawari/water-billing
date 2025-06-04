@@ -58,6 +58,7 @@ class CatatController extends Controller
                 'nama' => $pelanggan->user->nama,
                 'alamat' => $pelanggan->alamat->nama_alamat,
                 'tarif' => $pelanggan->tarif->kode,
+                'no_meter' => $pelanggan->no_meter
                 // 'tagihan' => number_format($pelanggan->tagihanTerakhir->jumlah, 0, ',', '.')
             ]);
 
@@ -99,7 +100,7 @@ class CatatController extends Controller
         $query = $request->get('query');
 
         // Menggunakan relationship dan whereHas
-        $pelanggan = Customer::where('id_pelanggan', 'LIKE', "%{$query}%")
+        $pelanggan = Customer::where('no_meter', 'LIKE', "%{$query}%")
             ->orWhereHas('user', function($q) use ($query) {
                 $q->where('nama', 'LIKE', "%{$query}%");
             })
@@ -109,12 +110,12 @@ class CatatController extends Controller
         $data = [];
         foreach ($pelanggan as $p) {
             // Format untuk ditampilkan: "ID Pelanggan - Nama User"
-            $label = $p->id_pelanggan . " - " . $p->user->nama;
+            $label = $p->no_meter . " - " . $p->user->nama;
 
             // Data yang akan digunakan saat item dipilih (hanya ID Pelanggan)
             $data[] = [
                 'label' => $label,
-                'value' => $p->id_pelanggan
+                'value' => $p->no_meter
             ];
         }
 
@@ -272,7 +273,7 @@ class CatatController extends Controller
             $catat->update([
                 'meter_awal' => $request->meterawal,
                 'meter_akhir' => $request->meterakhir,
-                'tgl_cek' => $request->tgl_cek,
+                'tgl_cek' => $request->tglcek,
                 'is_rusak' => $isrusak,
                 'petugas_id' => Auth::user()->id, // Update petugas yang mengedit
             ]);
@@ -287,7 +288,7 @@ class CatatController extends Controller
     public function getDetail($id)
     {
         try {
-            $catat = Catat::with(['customer.user', 'customer.alamat', 'customer.tarif'])
+            $catat = Catat::with(['customer.user', 'customer.alamat', 'customer.tarif', 'customer'])
                 ->findOrFail($id);
 
             return response()->json([
@@ -303,7 +304,8 @@ class CatatController extends Controller
                     'tgl_cek' => $catat->tgl_cek,
                     'bulan' => $catat->month,
                     'tahun' => $catat->year,
-                    'is_rusak' => $catat->is_rusak
+                    'is_rusak' => $catat->is_rusak,
+                    'no_meter' => $catat->customer->no_meter
                 ]
             ]);
         } catch (\Exception $e) {
