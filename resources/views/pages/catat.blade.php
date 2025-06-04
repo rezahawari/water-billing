@@ -775,7 +775,7 @@
                     `;
                     showState('scan-result');
 
-                    
+
                     // Handle tombol setuju
                     document.getElementById('confirm-btn').onclick = () => {
                         document.getElementById('idpel').value = data.no_meter;
@@ -805,17 +805,26 @@
 
             Instascan.Camera.getCameras().then(cameras => {
                 if (cameras.length > 0) {
-                    scanner = new Instascan.Scanner({
-                        video: document.getElementById('preview'),
-                        mirror: false
-                    });
+                    // Pilih kamera belakang (environment-facing mode)
+                    const backCamera = cameras.find(camera => camera.facing === 'environment');
 
-                    scanner.addListener('scan', (content) => {
-                        scanner.stop();
-                        processScan(content);
-                    });
+                    if (backCamera) {
+                        scanner = new Instascan.Scanner({
+                            video: document.getElementById('preview'),
+                            mirror: false
+                        });
 
-                    scanner.start(cameras[0]);
+                        scanner.addListener('scan', (content) => {
+                            scanner.stop();
+                            processScan(content);
+                        });
+
+                        // Mulai scanner dengan kamera belakang
+                        scanner.start(backCamera);
+                    } else {
+                        alert('Kamera belakang tidak tersedia!');
+                        modal.hide();
+                    }
                 } else {
                     alert('Kamera tidak tersedia!');
                     modal.hide();
