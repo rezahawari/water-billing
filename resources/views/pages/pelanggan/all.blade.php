@@ -64,76 +64,73 @@
                                     @php
                                         $no = 1;
                                     @endphp
-                                    @if ($customer->isNotEmpty())
-                                        @foreach ($customer as $user)
-                                            <tr>
-                                                <td>
-                                                    {{$no++}}
-                                                </td>
-                                                <td>
-                                                    {{$user->id_pelanggan}}
-                                                </td>
-                                                <td>
-                                                    {{$user->no_meter}}
-                                                </td>
-                                                <td>
-                                                    {{$user->user->nama}}
-                                                </td>
-                                                <td>{{$user->alamat->nama_alamat}}</td>
-                                                <td>{{$user->tarif->kode}}</td>
-                                                <td>
-                                                    {{-- <div class="dropdown">
-                                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                                                        </a>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink6">
-                                                            <a class="dropdown-item" href="javascript:void(0);">View</a>
-                                                            <a class="dropdown-item" href="javascript:void(0);">Edit</a>
-                                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                                        </div>
-                                                    </div> --}}
-                                                    <div class="btn-group dropstart">
-                                                        <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        Action
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="{{route('customer.allshow', $user->id)}}">View</a></li>
-                                                            <li><a class="dropdown-item" href="javascript:void(0);"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editForm"
-                                                                data-id="{{ $user->id }}"
-                                                                data-idpelanggan="{{ $user->id_pelanggan }}"
-                                                                data-nama="{{ $user->user->nama }}"
-                                                                data-alamat="{{ $user->alamat_id }}"
-                                                                data-tarif = "{{$user->tarif_id}}"
-                                                                data-meter = "{{$user->no_meter}}"
-                                                                >Edit</a></li>
-                                                            <li><a class="dropdown-item btndelete" href="javascript:void(0);" data-id="{{$user->id}}" data-nama="{{$user->user->nama}}">Delete</a></li>
-                                                        </ul>
+                                    @foreach ($customer as $user)
+                                        <tr>
+                                            <td>
+                                                {{$no++}}
+                                            </td>
+                                            <td>
+                                                {{$user->id_pelanggan}}
+                                            </td>
+                                            <td>
+                                                {{$user->no_meter}}
+                                            </td>
+                                            <td>
+                                                {{$user->user->nama}}
+                                            </td>
+                                            <td>{{$user->alamat->nama_alamat}}</td>
+                                            <td>{{$user->tarif->kode}}</td>
+                                            <td>
+                                                {{-- <div class="dropdown">
+                                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                                                    </a>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink6">
+                                                        <a class="dropdown-item" href="javascript:void(0);">View</a>
+                                                        <a class="dropdown-item" href="javascript:void(0);">Edit</a>
+                                                        <a class="dropdown-item" href="javascript:void(0);">Delete</a>
                                                     </div>
-                                                </td>
-                                                {{-- <td>
-                                                    <a class="btn btn-info btn-sm _effect--ripple waves-effect waves-light edit-btn"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editForm"
-                                                        data-id="{{ $user->id }}"
-                                                        data-idpelanggan="{{ $user->id_pelanggan }}"
-                                                        data-nama="{{ $user->user_id }}"
-                                                        data-alamat="{{ $user->alamat_id }}"
-                                                        data-tarif="{{ $user->tarif_id }}">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
-                                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                            </svg>
-                                                    </a>
-                                                    <a class="btn btn-danger btn-sm _effect--ripple waves-effect waves-light btndelete" id="btndelete{{$user->id}}" data-id="{{$user->id}}" data-nama="{{$user->nama}}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                                    </a>
-                                                </td> --}}
-                                            </tr>
-                                        @endforeach
-
-                                    @endif
+                                                </div> --}}
+                                                <div class="btn-group dropstart">
+                                                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                      Action
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="{{route('customer.allshow', $user->id)}}">View</a></li>
+                                                        <li><a class="dropdown-item" href="javascript:void(0);"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editForm"
+                                                            data-id="{{ $user->id }}"
+                                                            data-idpelanggan="{{ $user->id_pelanggan }}"
+                                                            data-nama="{{ $user->user->nama }}"
+                                                            data-alamat="{{ $user->alamat_id }}"
+                                                            data-tarif = "{{$user->tarif_id}}"
+                                                            data-meter = "{{$user->no_meter}}"
+                                                            >Edit</a></li>
+                                                        <li><a class="dropdown-item btndelete" href="javascript:void(0);" data-id="{{$user->id}}" data-nama="{{$user->user->nama}}">Delete</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            {{-- <td>
+                                                <a class="btn btn-info btn-sm _effect--ripple waves-effect waves-light edit-btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editForm"
+                                                    data-id="{{ $user->id }}"
+                                                    data-idpelanggan="{{ $user->id_pelanggan }}"
+                                                    data-nama="{{ $user->user_id }}"
+                                                    data-alamat="{{ $user->alamat_id }}"
+                                                    data-tarif="{{ $user->tarif_id }}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
+                                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                                        </svg>
+                                                </a>
+                                                <a class="btn btn-danger btn-sm _effect--ripple waves-effect waves-light btndelete" id="btndelete{{$user->id}}" data-id="{{$user->id}}" data-nama="{{$user->nama}}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                                </a>
+                                            </td> --}}
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
