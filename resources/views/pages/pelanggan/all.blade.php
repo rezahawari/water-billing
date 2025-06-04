@@ -76,10 +76,21 @@
                                                 {{$user->no_meter}}
                                             </td>
                                             <td>
-                                                {{$user->user->nama}}
+                                                @if($user->user)
+                                                    {{$user->user->nama}}
+                                                @else
                                             </td>
-                                            <td>{{$user->alamat->nama_alamat}}</td>
-                                            <td>{{$user->tarif->kode}}</td>
+                                            <td>
+                                                @if ($user->alamat)
+                                                    {{$user->alamat->nama_alamat}}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($user->tarif)
+                                                    {{$user->tarif->kode}}
+
+                                                @endif
+                                            </td>
                                             <td>
                                                 {{-- <div class="dropdown">
                                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
