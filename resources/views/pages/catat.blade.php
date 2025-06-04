@@ -775,6 +775,7 @@
                     `;
                     showState('scan-result');
 
+                    
                     // Handle tombol setuju
                     document.getElementById('confirm-btn').onclick = () => {
                         document.getElementById('idpel').value = data.no_meter;
