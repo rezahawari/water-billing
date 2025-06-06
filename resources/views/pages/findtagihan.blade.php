@@ -165,7 +165,7 @@
 
                                                 <div class="row">
                                                     <div class="col-xl-12 col-md-3 col-sm-6">
-                                                        <a href="javascript:void(0);" class="btn btn-danger btn-send btnbayar">Bayar</a>
+                                                        <a href="javascript:void(0);" class="btn btn-danger btn-send btnbayar" data-id="{{$tagihan->id}}">Bayar</a>
                                                     </div>
                                                     <div class="col-xl-12 col-md-3 col-sm-6">
                                                         <a href="javascript:void(0);" class="btn btn-secondary btn-print  action-print">Print</a>
@@ -207,6 +207,7 @@
         $(document).ready(function(){
             $('.btnbayar').on('click', function(){
             var id = $(this).data('id');
+            var successUrl = "{{ route('tagihan') }}";
             // var nama = $(this).data('nama');
             Swal.fire({
                 title: "Apakah kamu yakin ingin membayar tagihan ini?",
@@ -235,7 +236,7 @@
                                     icon: "success"
                                 }).then(() => {
                                     // Refresh halaman setelah berhasil menghapus
-                                    location.reload(); // Halaman akan di-refresh
+                                    window.location.href = successUrl;
                                 });
                             } else {
                                 Swal.fire({

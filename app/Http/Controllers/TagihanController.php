@@ -94,11 +94,15 @@ class TagihanController extends Controller
 
     public function payment(Request $request)
     {
-        $tagihan = Tagihan::find($request->id);
-        $tagihan->status = 2;
-        $tagihan->save();
+         try {
+            $tagihan = Tagihan::find($request->id);
+            $tagihan->status = 2;
+            $tagihan->save();
 
-        return redirect()->route('tagihan')->with('success', 'Tagihan berhasil dibayar');
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
     }
 
 }
